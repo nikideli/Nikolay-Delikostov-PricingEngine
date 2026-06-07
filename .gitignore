@@ -1,0 +1,26 @@
+## Binaries & build outputs
+bin/
+obj/
+
+## User-specific files
+*.user
+*.suo
+.vs/
+
+## Rider / JetBrains
+.idea/
+*.DotSettings.user
+
+## NuGet packages (restored on build)
+packages/
+*.nupkg
+*.snupkg
+
+## Secrets — never commit real credentials
+**/appsettings.Production.json
+**/appsettings.Secrets.json
+secrets.json
+
+## OS noise
+.DS_Store
+Thumbs.db

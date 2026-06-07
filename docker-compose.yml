@@ -1,0 +1,57 @@
+services:
+  # ------------------------------------------------------------------ #
+  # PostgreSQL — primary database                                        #
+  # ------------------------------------------------------------------ #
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB:       pricing_engine
+      POSTGRES_USER:     pricing
+      POSTGRES_PASSWORD: pricing_secret
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pricing -d pricing_engine"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ------------------------------------------------------------------ #
+  # RabbitMQ — message bus for the Transactional Outbox                 #
+  # ------------------------------------------------------------------ #
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: pricing
+      RABBITMQ_DEFAULT_PASS: pricing_secret
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI → http://localhost:15672
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  # ------------------------------------------------------------------ #
+  # Pricing Engine API                                                   #
+  # ------------------------------------------------------------------ #
+  api:
+    build:
+      context: .
+      dockerfile: src/PricingEngine.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_URLS: "http://+:8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
