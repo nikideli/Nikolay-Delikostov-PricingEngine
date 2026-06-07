@@ -75,7 +75,7 @@ That single command builds the image, starts all three containers, and runs data
 | RabbitMQ Management | http://localhost:15672 |
 
 > **Swagger tip:** use the dropdown in the top-right to switch between **Public API v1** and **Admin API**.
-> The Admin API requires the header `X-Admin-Key: admin-secret` (pre-configured for Docker).
+> Admin endpoints require the header `X-Admin-Key: admin-secret` — add it in the field Swagger shows at the top of each admin operation.
 
 EF Core migrations run automatically on startup — no manual database setup needed.
 
