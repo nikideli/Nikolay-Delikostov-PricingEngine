@@ -67,12 +67,12 @@ docker compose up --build
 
 That single command builds the image, starts all three containers, and runs database migrations. No other setup required.
 
-| Service | URL |
-|---|---|
-| Public API (Quotes) | http://localhost:8080/api/quotes |
-| Swagger UI | http://localhost:8080/swagger |
-| Health check | http://localhost:8080/health |
-| RabbitMQ Management | http://localhost:15672 |
+| Service | URL | Credentials |
+|---|---|---|
+| Public API (Quotes) | http://localhost:8080/api/quotes | — |
+| Swagger UI | http://localhost:8080/swagger | — |
+| Health check | http://localhost:8080/health | — |
+| RabbitMQ Management | http://localhost:15672 | user: `pricing` / password: `pricing_secret` |
 
 > **Swagger tip:** use the dropdown in the top-right to switch between **Public API v1** and **Admin API**.
 > Admin endpoints require the header `X-Admin-Key: admin-secret` — add it in the field Swagger shows at the top of each admin operation.
@@ -81,7 +81,7 @@ EF Core migrations run automatically on startup — no manual database setup nee
 
 To tear down (including volumes):
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ---
